@@ -1,0 +1,171 @@
+@model FarmatodoWeb.Models.Persona
+
+@{
+    ViewBag.Title="Crear Cuenta";
+    Layout="_LayoutAcceso";
+}
+
+<div class="row">
+    <div class="col-8 offset-2 col-sm-8 offset-sm-2 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
+        <section>
+            @* <h4>Crear una nueva cuenta.</h4> *@
+            <br/>
+            @* <form asp-action="CrearCuenta" method="post" id="formCrearCuenta"> *@
+            <form asp-action="CrearCuenta" method="post" id="formCrearCuenta">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="Id" id="letra"></label>
+                            <input class="form-control" asp-for="Id" placeholder="Ingrese su DNI">
+                            <span class="text-danger" asp-validation-for="Id"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-6">
+                        <div class="form-group">
+                            <label asp-for="Contrasena" id="letra"></label>
+                            <input class="form-control" asp-for="Contrasena" placeholder="*********">
+                            <span class="text-danger" asp-validation-for="Contrasena"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                        <div class="form-group">
+                            <label asp-for="Nombre" id="letra"></label>
+                            <input class="form-control" asp-for="Nombre" placeholder="Javier">
+                            <span class="text-danger" asp-validation-for="Nombre"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                        <div class="form-group">
+                            <label asp-for="ApellidoPat" id="letra"></label>
+                            <input class="form-control" asp-for="ApellidoPat" placeholder="Hilario">
+                            <span class="text-danger" asp-validation-for="ApellidoPat"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                        <div class="form-group">
+                            <label asp-for="ApellidoMat" id="letra"></label>
+                            <input class="form-control" asp-for="ApellidoMat" placeholder="Urpay">
+                            <span class="text-danger" asp-validation-for="ApellidoMat"></span>
+                        </div>
+                    </div>
+                    <label class="control-label" asp-for="Genero" id="letra"></label><br/>
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <label class="form-check-inline" style="display: block;" id="letra">
+                            <input class="form-check-input" asp-for="Genero" type="radio" value="Masculino" checked>M</label>
+                        </label>&ensp;
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                        <label class="form-check-inline" style="display: block;" id="letra">
+                            <input class="form-check-input" asp-for="Genero" type="radio" value="Femenino">F</label>
+                        </label>
+                    </div>
+                    <span class="text-danger" asp-validation-for="Genero"></span>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <label asp-for="Foto" id="letra"></label>
+                            <input class="form-control" asp-for="Foto" placeholder="https://pa1.narvii.com/7040/616d331248019cc651d4bd613d2356a3a3f0de8dr1-245-245_128.gif">
+                            <span class="text-danger" asp-validation-for="Foto"></span>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    @* <button class="btn btn-primary" type="submit" style="margin: auto; display: block;">Crear</button> *@
+                    <button class="btn btn-primary float-right" type="submit" style="width:120px;">Crear</button>
+                </div>
+                <br/>
+                <br/>
+            </form>
+        </section>
+    </div>
+</div>
+
+@*
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+    
+    <script>
+        $(document).ready(function(){
+            $("#formCrearCuenta").submit(function(e){
+                e.preventDefault();
+                url="@Url.Content("~/Acceso/IniciarSesionQuery")"
+                parametros=$(this).serialize();
+                $.post(url, parametros, function(data){
+                    if(data=="1"){
+                        Swal.fire(
+                            'Cliente creado con éxito',
+                            'Existen campos vacíos',
+                            'success'
+                        );
+                        alert("retorno del controlador a la vista => C:1=V: "+data);
+                        document.location.href="@Url.Content("/Home/Index")";
+                    }else{
+                        Swal.fire(
+                            'Error',
+                            'Existen campos vacíos',
+                            'error'
+                        );
+                        alert("No retorno del controlador a la vista => C:1=V: "+data);
+                    }
+                })
+            });
+        });
+    </script>
+    
+    <script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+}
+@* No tiene js así que no hará nada xd(grp) *@
+
+@*
+@section Scripts{
+    <script>
+        function Callback(){
+            // do something where you can call an action method in controller to pass some data via AJAX() request
+            Swal.fire(
+                'Error',
+                'Campos incorrectos',
+                'error'
+            );
+        }
+        $(document).ready(function(){
+            $("#formCrearCuenta").submit(function(e){
+                e.preventDefault();
+                url="@Url.Content("~/Acceso/CrearCuentaQuery")"
+                parametros=$(this).serialize();
+                $.post(url, parametros, function(data){
+                    if(data=="Cliente Creado"){
+                        document.location.href="@Url.Content("/List/Producto")";
+                    }else if(data=="Usuario Existente"){
+                        Swal.fire(
+                            'Warning',
+                            'Usuario Existente',
+                            'error'
+                        );
+                    }else{
+                        Swal.fire(
+                            'Error',
+                            'Campos incorrectos',
+                            'error'
+                        );
+                        /* alert("No retorno del controlador a la vista => C:1=V: "+data); */
+                    }
+                })
+            });
+        });
+    </script>
+    
+    <script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+}
+*@
+
+@* @section Scripts2{
+<script type="text/javascript">
+     @Model.JavascriptToRun
+    function ShowErrorPopup() {
+          alert('Sorry, we could not process your order.');
+     }
+</script>
+    
+    <script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+} *@

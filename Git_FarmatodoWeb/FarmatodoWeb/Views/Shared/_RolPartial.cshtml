@@ -1,0 +1,37 @@
+@using FarmatodoWeb.Models
+@using Microsoft.AspNetCore.Http
+@model Modelos
+
+@{
+    var Logueado=AppHttpContext.Current.Session.GetString("Logueado");
+}
+
+<ul class="navbar-nav flex-grow-1">
+@if(PersonaBase.Id>0 && Logueado!=null){
+    @if(PersonaBase.Rol.Equals("Administrador")){
+        <li class="nav-item">
+            <a class="nav-link" asp-action="AdministradorV1" asp-controller="Administrador" id="letra">V1 (Solo ve el Administrador)</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="letra">Administrar <span class="caret"></span></a>
+            <div class="nav-item dropdown-menu" id="navegacion">
+                <a class="nav-link" asp-action="AdministradorV1" asp-controller="Administrador" id="letra">Compras</a>
+                <a class="nav-link" asp-action="AdministradorV1" asp-controller="Administrador" id="letra">Ventas</a>
+                <a class="nav-link" asp-action="AdministradorV1" asp-controller="Administrador" id="letra">Productos</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-action="AdministradorV2" asp-controller="Administrador" id="letra">V2 (Solo ve el Administrador)</a>
+        </li>
+    }else if(PersonaBase.Rol.Equals("Cliente")){
+        <li class="nav-item">
+            <a class="nav-link" asp-action="ClienteV1" asp-controller="Cliente" id="letra">V1 (Solo ve el Cliente)</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-action="ClienteV2" asp-controller="Cliente" id="letra">V2 (Solo ve el Cliente)</a>
+        </li>
+    }else{
+    }
+    Console.WriteLine("(Rol) Rol: "+PersonaBase.Rol+" | Cliente: "+PersonaBase.Nombre);
+}else{
+}

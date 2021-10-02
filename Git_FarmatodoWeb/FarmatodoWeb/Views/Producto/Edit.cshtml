@@ -1,0 +1,97 @@
+@* @model FarmatodoWeb.Models.Producto *@
+@using FarmatodoWeb.Models
+@model Modelos
+
+@{
+    ViewData["Title"] = "Editar Producto";
+}
+
+<div class="text-center">
+    <h1 class="display-5" id="titulo">@ViewData["Title"]</h1>
+</div>
+
+<div id="panel">
+
+  <div class="row form-group">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
+      <p id="letra">Edite los datos del Producto</p>
+    </div>
+  </div>
+
+  <form asp-action="Edit">
+    <div class="row text-left">
+      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+      <input type="hidden" asp-for="Modelo_Producto.Id"/>
+      
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <div class="form-group">
+          <label asp-for="Modelo_Producto.Id" class="control-label" id="campo1"></label><br/>
+          <input asp-for="Modelo_Producto.Id" class="form-control" disabled/><br/>
+          <span asp-validation-for="Modelo_Producto.Id" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="Modelo_Producto.Descripcion" class="control-label" id="campo1"></label><br/>
+          <input asp-for="Modelo_Producto.Descripcion" class="form-control"/><br/>
+          <span asp-validation-for="Modelo_Producto.Descripcion" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="Modelo_Producto.Precio" class="control-label" id="campo1"></label><br/>
+          <input asp-for="Modelo_Producto.Precio" class="form-control"/><br/>
+          <span asp-validation-for="Modelo_Producto.Precio" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="Modelo_Producto.CategoriaId" class="control-label" id="campo1"></label><br/>
+          <select asp-for="Modelo_Producto.CategoriaId" class="form-control">
+            @foreach(var cat in (List<Categoria>)ViewBag.Categorias){
+              <option value="@cat.Id">@cat.Descripcion</option>
+            }
+          </select>
+        </div>
+        <br/>
+        <div class="form-group">
+          <label asp-for="Modelo_Producto.Foto" class="control-label" id="campo1"></label><br/>
+          <input asp-for="Modelo_Producto.Foto" class="form-control"/><br/>
+          <span asp-validation-for="Modelo_Producto.Foto" class="text-danger"></span>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <div class="form-group">
+          <template id="zoom-template">
+            <div id="zoom-template-wrapper">
+              <div id="zoom-container">
+                <h2 id="letra">@Model.Modelo_Producto.Descripcion</h2>
+              </div>
+            </div>
+          </template>
+          <section>
+            <div class="contenedorFotoProducto">
+              <div class="FotoProducto">
+                <img class="zoom-tmp" src="@Model.Modelo_Producto.Foto" alt="@Model.Modelo_Producto.Foto" title="@Model.Modelo_Producto.Descripcion" id="letra">
+              </div>
+            </div>
+          </section>
+          @* <br/><br/><br/><br/> *@
+          <section>
+            <div style="text-align: center;">
+              @{
+                for(int i=0; i<5; i++){
+                  <div class="MiniFotoProducto">
+                    <img class="zoom-tmp" src="@Model.Modelo_Producto.Foto" style="max-height: 50px; max-width: 50px;" alt="@Model.Modelo_Producto.Foto" title="@Model.Modelo_Producto.Descripcion" id="letra">
+                  </div>
+                }
+              }
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <div class="text-center">
+        <input type="submit" value="Actualizar" id="boton"/>
+      </div>
+  </form>
+</div>
+
+<script src="~/js/medium-zoom.min.js"></script>
+<script src="~/js/medium-zoom.min_yo.js"></script>

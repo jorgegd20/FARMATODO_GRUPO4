@@ -1,0 +1,292 @@
+@* @model FarmatodoWeb.Utils.Paginador<Producto> *@
+    @* @model IEnumerable<FarmatodoWeb.Models.Producto> *@
+@using FarmatodoWeb.Models
+@model Modelos
+
+@{
+    ViewData["Title"] = "Búsqueda de Productos";
+}
+
+<div class="text-center">
+    <h1 class="display-5" id="titulo">@ViewData["Title"]</h1>
+</div>
+
+@{
+    var cFilas=0;
+    int cantidad=Model.Modelo_Paginador_Producto.TotalRegistros; string texto; string palabra=ViewData["palabra"]+"";
+}
+
+<div id="panel">
+    <form method="get" action=@Url.Action("List", "Producto")>
+    <div class="row form-group">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-left">
+            <table class="table table-borderless table-hover">
+                <tr>
+                    @if(palabra!=""){
+                        if(Model.Modelo_Paginador_Producto.Resultado.Count()>1){
+                            texto="resultados encontrados para";
+                            <span id="letra"><strong>@cantidad </strong>@texto <strong>"@palabra"</strong></span>
+                        }else if(Model.Modelo_Paginador_Producto.Resultado.Count()==1){
+                            texto="resultado encontrado para";
+                            <span id="letra"><strong>@cantidad </strong>@texto <strong>"@palabra"</strong></span>
+                        }else{
+                            texto="No hay resultados para";
+                            <span id="letra">@texto <strong>"@palabra"</strong></span>
+                        }
+                    }else{
+                        //No se mostrará nada
+                    }
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+            <table class="table table-borderless table-hover">
+                <tr>
+                    @if(Model.Modelo_Paginador_Producto.Resultado.Count()>0){
+                        <span id="letra">Página <strong>@(Model.Modelo_Paginador_Producto.PaginaActual)</strong> de <strong>@(Model.Modelo_Paginador_Producto.TotalPaginas)</strong></span>
+                    }
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 text-left">
+            <div class="inner-addon left-addon">
+                <img src="/imagenes/BuscarNegro.png" width="36px" data-toggle="tooltip" data-placement="bottom" title="Buscar" class="glyphicon glyphicon-user"/>
+                @if(palabra!=null){
+                    <input name="buscarProductos" type="text" class="form-control" placeholder="Buscar" value=@ViewData["palabra"] />
+                }else{
+                    <input name="buscarProductos" type="text" class="form-control" placeholder="Buscar"/>
+                }
+            </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-right">
+            <button type="submit" data-toggle="tooltip" data-placement="bottom" title="Buscar Productos" id="boton"><img src="/imagenes/button-buscar.png"></button>
+            <button type="reset" data-toggle="tooltip" data-placement="bottom" title="Limpiar campo" id="boton"><img src="/imagenes/button-limpiar.png"></button>
+            <button asp-controller="Producto" asp-action="Create" data-toggle="tooltip" data-placement="bottom" title="Registrar Producto" id="boton"><img src="/imagenes/button-agregar.png"></button>
+        </div>
+    </div>
+    </form>
+    
+    <hr>
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <table class="table table-borderless table-hover text-center">
+                <thead id="tablaCabezaFactura" style="text-transform: uppercase;">
+                    <tr>
+                        <th scope="col" id="CeldaRedondeadaArribaIzquierda">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Producto.Id)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Producto.Descripcion)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Producto.Precio)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Producto.Categoria)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Producto.Foto)
+                        </th>
+                        <th scope="col" id="CeldaRedondeadaArribaDerecha">
+                            MODIFICAR
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(Model.Modelo_Paginador_Producto.Resultado.Count()>0){
+                        @foreach(var item in Model.Modelo_Paginador_Producto.Resultado){
+                            cFilas++;
+                            <tr id="tablaCuerpoFactura">
+                                @{
+                                    if(cFilas!=Model.Modelo_Paginador_Producto.Resultado.Count()){
+                                        <td>
+                                            @Html.DisplayFor(modelItem=>item.Id)
+                                        </td>
+                                    }else{
+                                        <td id="CeldaRedondeadaAbajoIzquierda">
+                                            @Html.DisplayFor(modelItem=>item.Id)
+                                        </td>
+                                    }
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem=>item.Descripcion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem=>item.Precio)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem=>item.Categoria.Descripcion)
+                                </td>
+                                <td>
+                                    <img src="@Html.DisplayFor(modelItem=>item.Foto)" alt="@item.Descripcion" title="@item.Descripcion" width="auto" height="48px">
+                                </td>
+                                @{
+                                    if(cFilas!=Model.Modelo_Paginador_Producto.Resultado.Count()){
+                                        <th scope="row">
+                                            <button id="boton"><a asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Editar Producto"><img src="/imagenes/button-editar.png"></a></button>
+                                            <button id="boton"><a asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar Producto"><img src="/imagenes/button-eliminar.png"></a></button>
+                                        </th>
+                                    }else{
+                                        <th scope="row" id="CeldaRedondeadaAbajoDerecha">
+                                            <button id="boton"><a asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Editar Producto"><img src="/imagenes/button-editar.png"></a></button>
+                                            <button id="boton"><a asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar Producto"><img src="/imagenes/button-eliminar.png"></a></button>
+                                        </th>
+                                    }
+                                }
+                            </tr>
+                        }
+                    }else{
+                        <tr id="tablaCuerpoFactura">
+                            <td scope="col" id="CeldaRedondeadaAbajoIzquierda">
+                                
+                            </td>
+                            <td colspan="4">
+                                <p>No hay nigún Producto registrado</p>
+                            </td>
+                            <td scope="col" id="CeldaRedondeadaAbajoDerecha">
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <center>
+                @if(Model.Modelo_Paginador_Producto.TotalPaginas>0){
+                    @if(Model.Modelo_Paginador_Producto.PaginaActual>1){
+                        @Html.ActionLink("<", "List", new {pagina=1, buscarProductos=Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;"})
+                    }else{
+                        @Html.ActionLink("<", "List", new{pagina=1, buscarProductos=Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;", @onclick="return false;"})
+                    }@for(int i=1; i<=Model.Modelo_Paginador_Producto.TotalPaginas; i++){
+                        if(i!=Model.Modelo_Paginador_Producto.PaginaActual){
+                            <a href="~/Producto/List?pagina=@i" id="letra">@i</a>
+                        }else{
+                            <b><a href="~/Producto/List?pagina=@i" onclick="return false;" id="letra">@i</a></b>
+                        }
+                    }@if(Model.Modelo_Paginador_Producto.PaginaActual<Model.Modelo_Paginador_Producto.TotalPaginas){
+                        @Html.ActionLink(">", "List", new{pagina=Model.Modelo_Paginador_Producto.TotalPaginas, buscarProductos= Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;"})
+                    }else{
+                        @Html.ActionLink(">", "List", new{pagina=Model.Modelo_Paginador_Producto.TotalPaginas, buscarProductos=Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;", @onclick="return false;"})
+                    }
+                }
+                <div class="row">
+                </div>
+            </center>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <table class="table table-borderless table-hover text-center">
+                <thead id="tablaCabezaFactura" style="text-transform: uppercase;">
+                    <tr>
+                        <th scope="col" id="CeldaRedondeadaArribaIzquierda">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Persona.Id)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Persona.Contrasena)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Persona.Nombre)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Persona.ApellidoPat)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Persona.ApellidoMat)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model=>Model.Modelo_Persona.Foto)
+                        </th>
+                        <th scope="col" id="CeldaRedondeadaArribaDerecha">
+                            MODIFICAR
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(Model.Modelo_IEnumerable_Persona.Count()>0){
+                        @foreach(var item in Model.Modelo_IEnumerable_Persona){
+                            cFilas++;
+                            <tr id="tablaCuerpoFactura">
+                                @{
+                                    if(cFilas!=Model.Modelo_IEnumerable_Persona.Count()){
+                                        <td>
+                                            @Html.DisplayFor(modelItem=>item.Id)
+                                        </td>
+                                    }else{
+                                        <td id="CeldaRedondeadaAbajoIzquierda">
+                                            @Html.DisplayFor(modelItem=>item.Id)
+                                        </td>
+                                    }
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem=>item.Contrasena)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem=>item.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem=>item.ApellidoPat)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem=>item.ApellidoMat)
+                                </td>
+                                <td>
+                                    <img class="rounded-circle" src="@Html.DisplayFor(modelItem=>item.Foto)" alt="@item.Nombre" title="@item.Nombre" width="auto" height="48px">
+                                </td>
+                                @{
+                                    if(cFilas!=Model.Modelo_IEnumerable_Persona.Count()){
+                                        <th scope="row">
+                                            <button id="boton"><a asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Editar Usuario"><img src="/imagenes/button-editar.png"></a></button>
+                                            <button id="boton"><a asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar Usuario"><img src="/imagenes/button-eliminar.png"></a></button>
+                                        </th>
+                                    }else{
+                                        <th scope="row" id="CeldaRedondeadaAbajoDerecha">
+                                            <button id="boton"><a asp-action="Edit" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Editar Usuario"><img src="/imagenes/button-editar.png"></a></button>
+                                            <button id="boton"><a asp-action="Delete" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Eliminar Usuario"><img src="/imagenes/button-eliminar.png"></a></button>
+                                        </th>
+                                    }
+                                }
+                            </tr>
+                        }
+                    }else{
+                        <tr id="tablaCuerpoFactura">
+                            <td scope="col" id="CeldaRedondeadaAbajoIzquierda">
+                                
+                            </td>
+                            <td colspan="4">
+                                <p>No hay nigún Producto registrado</p>
+                            </td>
+                            <td scope="col" id="CeldaRedondeadaAbajoDerecha">
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <center>
+                @if(Model.Modelo_Paginador_Producto.TotalPaginas>0){
+                    @if(Model.Modelo_Paginador_Producto.PaginaActual>1){
+                        @Html.ActionLink("<", "List", new {pagina=1, buscarProductos=Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;"})
+                    }else{
+                        @Html.ActionLink("<", "List", new{pagina=1, buscarProductos=Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;", @onclick="return false;"})
+                    }@for(int i=1; i<=Model.Modelo_Paginador_Producto.TotalPaginas; i++){
+                        if(i!=Model.Modelo_Paginador_Producto.PaginaActual){
+                            <a href="~/Producto/List?pagina=@i" id="letra">@i</a>
+                        }else{
+                            <b><a href="~/Producto/List?pagina=@i" onclick="return false;" id="letra">@i</a></b>
+                        }
+                    }@if(Model.Modelo_Paginador_Producto.PaginaActual<Model.Modelo_Paginador_Producto.TotalPaginas){
+                        @Html.ActionLink(">", "List", new{pagina=Model.Modelo_Paginador_Producto.TotalPaginas, buscarProductos= Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;"})
+                    }else{
+                        @Html.ActionLink(">", "List", new{pagina=Model.Modelo_Paginador_Producto.TotalPaginas, buscarProductos=Model.Modelo_Paginador_Producto.BusquedaActual}, new{@id="letra", @style="text-align: text-center;", @onclick="return false;"})
+                    }
+                }
+                <div class="row">
+                </div>
+            </center>
+        </div>
+    </div>
+</div>
